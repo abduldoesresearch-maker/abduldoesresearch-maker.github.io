@@ -1,0 +1,2090 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Abdul · Freelance Data Analyst</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy:     #0D1B3E;
+      --navy-mid: #162447;
+      --navy-lit: #1E3A6E;
+      --ice:      #C8DCFA;
+      --steel:    #4A90C4;
+      --coral:    #E8634A;
+      --gold:     #F5A623;
+      --white:    #FFFFFF;
+      --muted:    #7A99C8;
+      --green:    #00C896;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--navy);
+      color: var(--white);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 400;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ══════════════════════════════════════════════
+       PAGE CENTERING SYSTEM — single source of truth
+       All content lives inside .container
+       Sections handle vertical padding only
+    ══════════════════════════════════════════════ */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 3rem;
+      width: 100%;
+    }
+
+    /* ── CANVAS PARTICLES ── */
+    #particle-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 3rem;
+      background: rgba(13, 27, 62, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(200, 220, 250, 0.08);
+      transition: padding 0.3s;
+    }
+
+    nav.scrolled {
+      padding: 0.8rem 3rem;
+      background: rgba(13, 27, 62, 0.95);
+    }
+
+    .nav-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.3rem;
+      color: var(--white);
+      text-decoration: none;
+    }
+
+    .nav-logo span { color: var(--gold); }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2.5rem;
+    }
+
+    nav ul a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+      position: relative;
+    }
+
+    nav ul a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; left: 0; right: 0;
+      height: 1px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transition: transform 0.2s;
+    }
+
+    nav ul a:hover { color: var(--white); }
+    nav ul a:hover::after { transform: scaleX(1); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8rem 0 5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-content {
+      max-width: 780px;
+      width: 100%;
+      padding: 0 3rem;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(74, 144, 196, 0.15);
+      border: 1px solid rgba(74, 144, 196, 0.3);
+      border-radius: 100px;
+      padding: 0.35rem 1rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--steel);
+      letter-spacing: 0.05em;
+      margin-bottom: 2rem;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .hero-tag-dot {
+      width: 6px; height: 6px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(0,200,150,0.4); }
+      50% { opacity: 0.8; transform: scale(1.1); box-shadow: 0 0 0 4px rgba(0,200,150,0); }
+    }
+
+    .hero h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.6s 0.1s ease both;
+      min-height: 2.2em;
+    }
+
+    .hero h1 em { font-style: italic; color: var(--gold); }
+
+    .cursor {
+      display: inline-block;
+      width: 3px;
+      height: 0.85em;
+      background: var(--gold);
+      margin-left: 4px;
+      vertical-align: middle;
+      animation: blink 0.8s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .hero-sub {
+      font-size: 1.15rem;
+      color: var(--ice);
+      max-width: 560px;
+      line-height: 1.7;
+      margin-bottom: 3rem;
+      font-weight: 300;
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+
+    /* ── ANIMATED STATS ── */
+    .hero-stats {
+      display: flex;
+      gap: 3rem;
+      margin-bottom: 3rem;
+      animation: fadeUp 0.6s 0.3s ease both;
+    }
+
+    .stat-item { cursor: default; }
+
+    .stat-val {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2.2rem;
+      color: var(--white);
+      line-height: 1;
+      transition: color 0.2s;
+    }
+
+    .stat-item:hover .stat-val { color: var(--gold); }
+    .stat-val span { color: var(--gold); }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 0.3rem;
+    }
+
+    .hero-services {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      animation: fadeUp 0.6s 0.38s ease both;
+    }
+
+    .service-pill {
+      background: rgba(200, 220, 250, 0.06);
+      border: 1px solid rgba(200, 220, 250, 0.15);
+      border-radius: 100px;
+      padding: 0.3rem 0.9rem;
+      font-size: 0.75rem;
+      color: var(--ice);
+      font-family: 'DM Mono', monospace;
+      letter-spacing: 0.04em;
+      transition: all 0.2s;
+      cursor: default;
+    }
+
+    .service-pill:hover {
+      background: rgba(245, 166, 35, 0.12);
+      border-color: rgba(245, 166, 35, 0.35);
+      color: var(--gold);
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      animation: fadeUp 0.6s 0.4s ease both;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 1.8rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.25s;
+      cursor: pointer;
+      border: none;
+      position: relative;
+      overflow: hidden;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.1);
+      transform: translateX(-100%);
+      transition: transform 0.3s;
+    }
+
+    .btn:hover::after { transform: translateX(0); }
+
+    .btn-primary {
+      background: var(--gold);
+      color: var(--navy);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(245, 166, 35, 0.35);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--ice);
+      border: 1px solid rgba(200, 220, 250, 0.25);
+    }
+
+    .btn-outline:hover {
+      border-color: rgba(200, 220, 250, 0.6);
+      color: var(--white);
+      transform: translateY(-2px);
+    }
+
+    /* ── SCROLL INDICATOR ── */
+    .scroll-hint {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--muted);
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-family: 'DM Mono', monospace;
+      animation: fadeUp 1s 1s ease both;
+      /* FIX #7: z-index above canvas (z-index:0) */
+      z-index: 2;
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--muted), transparent);
+      animation: scrollDrop 1.5s infinite;
+    }
+
+    @keyframes scrollDrop {
+      0% { transform: scaleY(0); transform-origin: top; }
+      50% { transform: scaleY(1); transform-origin: top; }
+      51% { transform: scaleY(1); transform-origin: bottom; }
+      100% { transform: scaleY(0); transform-origin: bottom; }
+    }
+
+    /* ── SKILLS STRIP ── */
+    .skills-strip {
+      background: var(--navy-mid);
+      border-top: 1px solid rgba(200, 220, 250, 0.07);
+      border-bottom: 1px solid rgba(200, 220, 250, 0.07);
+      padding: 1.2rem 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .skills-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 3rem;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .skills-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .skills-track {
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+    }
+
+    .skill-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(200, 220, 250, 0.06);
+      border: 1px solid rgba(200, 220, 250, 0.12);
+      border-radius: 100px;
+      padding: 0.3rem 0.9rem;
+      font-size: 0.78rem;
+      color: var(--ice);
+      white-space: nowrap;
+      transition: all 0.2s;
+      cursor: default;
+    }
+
+    .skill-pill:hover {
+      background: rgba(200, 220, 250, 0.12);
+      border-color: rgba(200, 220, 250, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .skill-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+    }
+
+    /* ── SECTIONS ── */
+    section {
+      padding: 7rem 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.15;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-sub {
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 520px;
+      line-height: 1.7;
+      margin-bottom: 4rem;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ── ABOUT ── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+      max-width: 1100px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .about-text p {
+      color: var(--ice);
+      font-size: 1rem;
+      line-height: 1.8;
+      margin-bottom: 1.2rem;
+      font-weight: 300;
+    }
+
+    .about-text p strong { color: var(--white); font-weight: 500; }
+
+    .about-cards { display: flex; flex-direction: column; gap: 1rem; }
+
+    .about-card {
+      background: var(--navy-mid);
+      border: 1px solid rgba(200, 220, 250, 0.08);
+      border-radius: 10px;
+      padding: 1.4rem 1.6rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      transition: all 0.25s;
+      cursor: default;
+    }
+
+    .about-card:hover {
+      border-color: rgba(200, 220, 250, 0.25);
+      transform: translateX(6px);
+      box-shadow: -4px 0 20px rgba(74, 144, 196, 0.1);
+    }
+
+    .about-card-icon {
+      width: 40px; height: 40px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
+      flex-shrink: 0;
+    }
+
+    .about-card-text h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.2rem; }
+    .about-card-text p { font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
+
+    /* ── CHART CONTAINER (shared) ── */
+    .chart-container {
+      max-width: 1100px;
+      background: var(--navy-mid);
+      border: 1px solid rgba(200, 220, 250, 0.08);
+      border-radius: 14px;
+      padding: 2.5rem;
+      margin-top: 2rem;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .chart-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.5rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .chart-subtitle { font-size: 0.85rem; color: var(--muted); }
+
+    .chart-tabs {
+      display: flex;
+      gap: 0.5rem;
+      background: var(--navy);
+      border-radius: 8px;
+      padding: 0.3rem;
+    }
+
+    .chart-tab {
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      transition: all 0.2s;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .chart-tab.active {
+      background: var(--navy-lit);
+      color: var(--white);
+    }
+
+    .chart-tab:hover:not(.active) { color: var(--ice); }
+
+    .chart-legend {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .legend-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+    }
+
+    /* Canvas chart */
+    #dataChart, #bbChart {
+      width: 100%;
+      height: 280px;
+      cursor: crosshair;
+      display: block;
+    }
+
+    /* FIX #1 & #10: Both tooltips use position:fixed */
+    .chart-tooltip {
+      position: fixed;
+      background: var(--navy-mid);
+      border: 1px solid rgba(200, 220, 250, 0.15);
+      border-radius: 8px;
+      padding: 0.8rem 1rem;
+      font-size: 0.82rem;
+      pointer-events: none;
+      display: none;
+      z-index: 200;
+      min-width: 160px;
+    }
+
+    .tooltip-title {
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+      color: var(--ice);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+    }
+
+    .tooltip-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .tooltip-label { color: var(--muted); }
+    .tooltip-val { font-weight: 600; }
+
+    /* ── PROJECTS ── */
+    .project-card {
+      background: var(--navy-mid);
+      border: 1px solid rgba(200, 220, 250, 0.08);
+      border-radius: 14px;
+      overflow: hidden;
+      max-width: 1100px;
+      margin-left: auto;
+      margin-right: auto;
+      margin-bottom: 2rem;
+      transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    }
+
+    .project-card:hover {
+      border-color: rgba(245, 166, 35, 0.3);
+      transform: translateY(-4px);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.35);
+    }
+
+    .project-header {
+      padding: 2.5rem 3rem;
+      border-bottom: 1px solid rgba(200, 220, 250, 0.07);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 2rem;
+    }
+
+    .project-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(0, 200, 150, 0.1);
+      border: 1px solid rgba(0, 200, 150, 0.25);
+      border-radius: 100px;
+      padding: 0.25rem 0.8rem;
+      font-size: 0.72rem;
+      color: var(--green);
+      font-family: 'DM Mono', monospace;
+      margin-bottom: 1rem;
+    }
+
+    .project-header h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.8rem;
+      line-height: 1.2;
+      margin-bottom: 0.8rem;
+    }
+
+    .project-header p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      max-width: 480px;
+    }
+
+    .project-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      flex-shrink: 0;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+    }
+
+    .meta-item strong { color: var(--ice); font-weight: 500; }
+
+    /* Findings */
+    .project-findings {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid rgba(200, 220, 250, 0.07);
+    }
+
+    .finding {
+      padding: 2rem;
+      border-right: 1px solid rgba(200, 220, 250, 0.07);
+      transition: background 0.2s;
+      cursor: default;
+    }
+
+    .finding:last-child { border-right: none; }
+    .finding:hover { background: rgba(200, 220, 250, 0.03); }
+
+    .finding-num {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2.2rem;
+      line-height: 1;
+      margin-bottom: 0.3rem;
+      transition: transform 0.2s;
+    }
+
+    .finding:hover .finding-num { transform: scale(1.08); }
+
+    .finding-label { font-size: 0.78rem; color: var(--muted); line-height: 1.4; }
+
+    /* Charts row */
+    .project-charts {
+      padding: 2rem 3rem;
+      display: flex;
+      gap: 1rem;
+      overflow-x: auto;
+      border-bottom: 1px solid rgba(200, 220, 250, 0.07);
+      scrollbar-width: thin;
+      scrollbar-color: rgba(200,220,250,0.1) transparent;
+    }
+
+    .chart-thumb {
+      border-radius: 8px;
+      overflow: hidden;
+      flex-shrink: 0;
+      border: 1px solid rgba(200, 220, 250, 0.08);
+      transition: all 0.25s;
+      cursor: pointer;
+    }
+
+    .chart-thumb:hover {
+      transform: scale(1.04) translateY(-3px);
+      border-color: rgba(200, 220, 250, 0.25);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+    }
+
+    .chart-thumb img {
+      width: 220px;
+      height: 140px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .chart-thumb-label {
+      background: var(--navy-mid);
+      padding: 0.4rem 0.7rem;
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-family: 'DM Mono', monospace;
+    }
+
+    /* Project footer */
+    .project-footer {
+      padding: 1.8rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .project-tools { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+    .tool-tag {
+      background: rgba(74, 144, 196, 0.1);
+      border: 1px solid rgba(74, 144, 196, 0.2);
+      border-radius: 4px;
+      padding: 0.2rem 0.6rem;
+      font-size: 0.75rem;
+      color: var(--steel);
+      font-family: 'DM Mono', monospace;
+      transition: all 0.2s;
+    }
+
+    .tool-tag:hover {
+      background: rgba(74, 144, 196, 0.2);
+      border-color: rgba(74, 144, 196, 0.4);
+    }
+
+    .project-links { display: flex; gap: 0.75rem; }
+
+    .project-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .link-primary { background: var(--gold); color: var(--navy); }
+    .link-primary:hover { background: #f7b84a; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(245,166,35,0.3); }
+
+    .link-secondary {
+      background: rgba(200, 220, 250, 0.08);
+      color: var(--ice);
+      border: 1px solid rgba(200, 220, 250, 0.15);
+    }
+
+    .link-secondary:hover { background: rgba(200, 220, 250, 0.14); transform: translateY(-2px); }
+
+    /* Chart section label within projects */
+    .chart-section-label {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 3rem;
+      margin-bottom: 0;
+      max-width: 1100px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .chart-section-label-line {
+      flex: 1;
+      height: 1px;
+      background: rgba(200, 220, 250, 0.08);
+    }
+
+    .chart-section-label span {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      white-space: nowrap;
+    }
+
+    /* Coming soon */
+    .coming-soon {
+      margin-top: 3rem;
+      margin-left: auto;
+      margin-right: auto;
+      background: rgba(200, 220, 250, 0.03);
+      border: 1px dashed rgba(200, 220, 250, 0.15);
+      border-radius: 14px;
+      padding: 3rem;
+      text-align: center;
+      max-width: 1100px;
+      transition: border-color 0.3s;
+    }
+
+    .coming-soon:hover { border-color: rgba(200, 220, 250, 0.3); }
+
+    .coming-soon h4 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.3rem;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .coming-soon p { font-size: 0.88rem; color: rgba(122, 153, 200, 0.6); }
+
+    /* ── CONTACT ── */
+    .contact { text-align: center; }
+    .contact .section-title { margin-bottom: 1rem; }
+
+    .contact p {
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 480px;
+      margin: 0 auto 3rem;
+      line-height: 1.7;
+    }
+
+    .contact-links { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--navy-mid);
+      border-top: 1px solid rgba(200, 220, 250, 0.07);
+      padding: 2rem 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    footer p { font-size: 0.8rem; color: var(--muted); font-family: 'DM Mono', monospace; }
+    .footer-logo { font-family: 'DM Serif Display', serif; font-size: 1rem; color: var(--white); }
+    .footer-logo span { color: var(--gold); }
+
+    /* ── IMAGE LIGHTBOX ── */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      backdrop-filter: blur(8px);
+    }
+
+    .lightbox.open { opacity: 1; pointer-events: all; }
+
+    .lightbox img {
+      max-width: 90vw;
+      max-height: 85vh;
+      border-radius: 10px;
+      transform: scale(0.9);
+      transition: transform 0.3s;
+    }
+
+    .lightbox.open img { transform: scale(1); }
+
+    .lightbox-close {
+      position: absolute;
+      top: 1.5rem; right: 1.5rem;
+      background: rgba(200,220,250,0.1);
+      border: 1px solid rgba(200,220,250,0.2);
+      color: var(--white);
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .lightbox-close:hover { background: rgba(200,220,250,0.2); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-up {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+    .fade-up:nth-child(2) { transition-delay: 0.1s; }
+    .fade-up:nth-child(3) { transition-delay: 0.2s; }
+    .fade-up:nth-child(4) { transition-delay: 0.3s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      nav ul { gap: 1rem; }
+      nav ul li a { font-size: 0.8rem; }
+      section { padding: 4rem 0; }
+      .container { padding: 0 1.2rem; }
+      .skills-inner { padding: 0 1.2rem; }
+      .footer-inner { padding: 0 1.2rem; flex-direction: column; gap: 1rem; text-align: center; }
+      .hero { padding: 6rem 0 3rem; }
+      .hero-content { padding: 0 1.2rem; }
+      .hero h1 { font-size: clamp(1.8rem, 7vw, 2.6rem); }
+      .hero-sub { font-size: 0.95rem; }
+      .hero-stats { gap: 1.2rem; flex-wrap: wrap; }
+      .stat-val { font-size: 1.6rem; }
+      .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .project-header { flex-direction: column; gap: 1rem; }
+      .project-findings { grid-template-columns: repeat(2, 1fr); }
+      .finding-num { font-size: 1.6rem; }
+      .project-footer { flex-direction: column; align-items: flex-start; gap: 1rem; }
+      .project-tools { gap: 0.4rem; }
+      .project-links { flex-direction: column; gap: 0.6rem; width: 100%; }
+      .project-link { text-align: center; }
+      .chart-container { padding: 1.2rem; border-radius: 10px; }
+      .chart-header { flex-direction: column; gap: 0.8rem; margin-bottom: 1rem; }
+      .chart-title { font-size: 1.1rem; }
+      .chart-tabs { flex-wrap: wrap; gap: 0.3rem; padding: 0.2rem; }
+      .chart-tab { padding: 0.4rem 0.65rem; font-size: 0.72rem; }
+      .chart-legend { gap: 0.8rem; margin-bottom: 0.8rem; flex-wrap: wrap; }
+      #dataChart { height: 220px !important; }
+      #bbChart { height: 220px !important; }
+      .coming-soon { padding: 1.5rem; }
+      .project-card { margin-bottom: 1.5rem; }
+    }
+
+    @media (max-width: 480px) {
+      nav ul { gap: 0.6rem; }
+      nav ul li a { font-size: 0.75rem; }
+      .hero { padding: 5rem 1rem 2.5rem; }
+      .project-findings { grid-template-columns: repeat(2, 1fr); }
+      .chart-tab { padding: 0.35rem 0.5rem; font-size: 0.68rem; }
+      .section-title { font-size: clamp(1.5rem, 6vw, 2rem); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- PARTICLE CANVAS -->
+<canvas id="particle-canvas"></canvas>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightbox-close">✕</button>
+  <img src="" alt="" id="lightbox-img">
+</div>
+
+<!-- CHART TOOLTIP — FIX #1: position:fixed in CSS above -->
+<div class="chart-tooltip" id="chartTooltip"></div>
+
+<!-- NAV — FIX #5: removed broken #insights link, nav now: About | Projects | Contact -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">Abdul<span>.</span></a>
+  <ul>
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+
+    <!-- WORDING: freelance/business focused -->
+    <div class="hero-tag">
+      <span class="hero-tag-dot"></span>
+      Open to new projects
+    </div>
+
+    <h1 id="hero-title"><span class="cursor"></span></h1>
+
+    <p class="hero-sub">
+      Freelance data analyst who turns business data into decisions. I work with
+      organisations to uncover what their data is actually saying and deliver the
+      analysis, reports and dashboards their teams can act on.
+    </p>
+
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-val"><span class="count-up" data-target="2"></span></div>
+        <div class="stat-label">Case Studies Delivered</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val"><span class="count-up" data-target="5700000"></span></div>
+        <div class="stat-label">Rows Processed</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val"><span class="count-up" data-target="7"></span></div>
+        <div class="stat-label">Services Offered</div>
+      </div>
+    </div>
+
+    <div class="hero-services">
+      <span class="service-pill">BI Reporting</span>
+      <span class="service-pill">SQL Development</span>
+      <span class="service-pill">Data Cleaning</span>
+      <span class="service-pill">EDA</span>
+      <span class="service-pill">Customer Segmentation</span>
+      <span class="service-pill">Dashboards</span>
+      <span class="service-pill">Ad-hoc Projects</span>
+    </div>
+
+    <div class="hero-cta">
+      <a href="#projects" class="btn btn-primary">View My Work</a>
+      <a href="mailto:abduldoesresearch@gmail.com" class="btn btn-outline">Get in Touch ✉</a>
+      <a href="https://www.linkedin.com/in/abdullahi-bagana-6b5599121/" target="_blank" class="btn btn-outline">LinkedIn ↗</a>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- SKILLS STRIP -->
+<div class="skills-strip">
+  <div class="skills-inner">
+    <span class="skills-label">Stack</span>
+    <div class="skills-track">
+      <span class="skill-pill"><span class="skill-dot" style="background:#4A90C4"></span>Python</span>
+      <span class="skill-pill"><span class="skill-dot" style="background:#E8634A"></span>BigQuery</span>
+      <span class="skill-pill"><span class="skill-dot" style="background:#F5A623"></span>SQL</span>
+      <span class="skill-pill"><span class="skill-dot" style="background:#4A90C4"></span>Pandas</span>
+      <span class="skill-pill"><span class="skill-dot" style="background:#E8634A"></span>Matplotlib</span>
+      <span class="skill-pill"><span class="skill-dot" style="background:#F5A623"></span>Google Cloud</span>
+      <span class="skill-pill"><span class="skill-dot" style="background:#4A90C4"></span>Data Visualisation</span>
+      <span class="skill-pill"><span class="skill-dot" style="background:#E8634A"></span>PowerPoint</span>
+      <span class="skill-pill"><span class="skill-dot" style="background:#00C896"></span>Git &amp; GitHub</span>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="section-tag">About Me</div>
+    <div class="about-grid">
+    <div class="about-text fade-up">
+      <h2 class="section-title">Turning numbers<br>into decisions.</h2>
+      <p>I am an independent data analyst with a passion for finding the story
+        inside complex datasets. I built a <strong>custom Python agent</strong>
+        connected to Google BigQuery to analyse 5.7 million bike rides,
+        uncovering behavioural patterns that drive real marketing strategy.</p>
+      <p>My approach combines <strong>technical rigour</strong> with clear
+        communication. I do not just find insights. I translate them into
+        language your team can act on, backed by compelling visualisations.</p>
+      <p>I work with businesses and teams on a <strong>freelance basis</strong>,
+        taking on projects in <strong>Data Analytics</strong>,
+        <strong>Business Intelligence</strong> and <strong>Data Science</strong>
+        wherever data can drive a meaningful decision.</p>
+    </div>
+    <div class="about-cards">
+      <div class="about-card fade-up">
+        <div class="about-card-icon" style="background:rgba(74,144,196,0.15)">🐍</div>
+        <div class="about-card-text">
+          <h4>Python & BigQuery</h4>
+          <p>Built interactive analysis agents querying millions of rows in Google Cloud</p>
+        </div>
+      </div>
+      <div class="about-card fade-up">
+        <div class="about-card-icon" style="background:rgba(232,99,74,0.15)">📊</div>
+        <div class="about-card-text">
+          <h4>Data Visualisation</h4>
+          <p>Matplotlib charts and executive PowerPoint decks that tell clear stories</p>
+        </div>
+      </div>
+      <div class="about-card fade-up">
+        <div class="about-card-icon" style="background:rgba(245,166,35,0.15)">🔍</div>
+        <div class="about-card-text">
+          <h4>SQL & Analytics</h4>
+          <p>Window functions, CTEs, and aggregations across complex multi-table datasets</p>
+        </div>
+      </div>
+      <div class="about-card fade-up">
+        <div class="about-card-icon" style="background:rgba(0,200,150,0.15)">💡</div>
+        <div class="about-card-text">
+          <h4>Business Thinking</h4>
+          <p>Translating analysis into actionable recommendations for executive audiences</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     PROJECTS — Cyclistic → Cyclistic Chart → Bellabeat → Bellabeat Chart → Coming Soon
+     ══════════════════════════════════════════════════════════════ -->
+<section id="projects">
+  <div class="container">
+  <div class="section-tag">Case Studies</div>
+  <h2 class="section-title">Work that speaks<br>for itself.</h2>
+  <p class="section-sub">End-to-end data analysis engagements. From raw data to executive presentation.</p>
+
+  <!-- ── CYCLISTIC PROJECT CARD ── -->
+  <div class="project-card fade-up">
+    <div class="project-header">
+      <div>
+        <div class="project-badge">✓ Complete</div>
+        <h3>Cyclistic Bike-Share<br>Case Study</h3>
+        <p>How do annual members and casual riders use Cyclistic bikes differently?
+        A 12-month analysis of 5.7 million rides to guide the conversion strategy.</p>
+      </div>
+      <div class="project-meta">
+        <div class="meta-item">📅 <strong>May 2025 – Apr 2026</strong></div>
+        <div class="meta-item">🚲 <strong>5,697,455 rides</strong></div>
+        <div class="meta-item">📍 <strong>Chicago, IL</strong></div>
+        <div class="meta-item">⏱ <strong>Avg casual: 22.4 min</strong></div>
+      </div>
+    </div>
+
+    <div class="project-findings">
+      <div class="finding">
+        <div class="finding-num" style="color:#E8634A">1.8×</div>
+        <div class="finding-label">Longer rides for<br>casuals vs members</div>
+      </div>
+      <div class="finding">
+        <div class="finding-num" style="color:#4A90C4">2.2×</div>
+        <div class="finding-label">More member rides<br>on weekdays</div>
+      </div>
+      <div class="finding">
+        <div class="finding-num" style="color:#F5A623">−82%</div>
+        <div class="finding-label">Casual winter drop<br>vs summer peak</div>
+      </div>
+      <div class="finding">
+        <div class="finding-num" style="color:#00C896">543K</div>
+        <div class="finding-label">High-priority<br>conversion targets</div>
+      </div>
+    </div>
+
+    <div class="project-charts">
+      <div class="chart-thumb" onclick="openLightbox('cyclistic-case-study/seasonal_trends.png', 'Seasonal Trends')">
+        <img src="cyclistic-case-study/seasonal_trends.png" alt="Seasonal trends">
+        <div class="chart-thumb-label">seasonal_trends.png</div>
+      </div>
+      <div class="chart-thumb" onclick="openLightbox('cyclistic-case-study/hourly_patterns.png', 'Hourly Patterns')">
+        <img src="cyclistic-case-study/hourly_patterns.png" alt="Hourly patterns">
+        <div class="chart-thumb-label">hourly_patterns.png</div>
+      </div>
+      <div class="chart-thumb" onclick="openLightbox('cyclistic-case-study/member_stations.png', 'Member Stations')">
+        <img src="cyclistic-case-study/member_stations.png" alt="Member stations">
+        <div class="chart-thumb-label">member_stations.png</div>
+      </div>
+      <div class="chart-thumb" onclick="openLightbox('cyclistic-case-study/duration_distribution.png', 'Duration Distribution')">
+        <img src="cyclistic-case-study/duration_distribution.png" alt="Duration distribution">
+        <div class="chart-thumb-label">duration_distribution.png</div>
+      </div>
+      <div class="chart-thumb" onclick="openLightbox('cyclistic-case-study/top_stations.png', 'Top Stations')">
+        <img src="cyclistic-case-study/top_stations.png" alt="Top stations">
+        <div class="chart-thumb-label">top_stations.png</div>
+      </div>
+    </div>
+
+    <div class="project-footer">
+      <div class="project-tools">
+        <span class="tool-tag">Python</span>
+        <span class="tool-tag">BigQuery</span>
+        <span class="tool-tag">SQL</span>
+        <span class="tool-tag">Pandas</span>
+        <span class="tool-tag">Matplotlib</span>
+        <span class="tool-tag">Google Cloud</span>
+        <span class="tool-tag">PowerPoint</span>
+      </div>
+      <div class="project-links">
+        <a href="cyclistic-case-study/Cyclistic_Case_Study.pptx" class="project-link link-primary" download>↓ Download Deck</a>
+        <a href="https://github.com/abduldoesresearch-maker/abduldoesresearch-maker.github.io/tree/main/cyclistic-case-study" target="_blank" class="project-link link-secondary">View on GitHub ↗</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CYCLISTIC INTERACTIVE CHART (inside projects, below its card) ── -->
+  <!-- FIX #9: moved here from separate section.chart-section -->
+  <div class="chart-section-label fade-up">
+    <div class="chart-section-label-line"></div>
+    <span>Interactive charts from the Cyclistic analysis</span>
+    <div class="chart-section-label-line"></div>
+  </div>
+
+  <div id="cyclistic-chart" class="chart-container fade-up">
+    <div class="chart-header">
+      <div>
+        <div class="chart-title">Member vs Casual Riders</div>
+        <div class="chart-subtitle">5.7 million rides. Hover over bars to see exact figures</div>
+      </div>
+      <div class="chart-tabs">
+        <button class="chart-tab active" data-chart="seasonal">Seasonal</button>
+        <button class="chart-tab" data-chart="weekday">Weekday/Weekend</button>
+        <button class="chart-tab" data-chart="duration">Avg Duration</button>
+      </div>
+    </div>
+    <div class="chart-legend">
+      <div class="legend-item"><span class="legend-dot" style="background:#E8634A"></span>Casual Riders</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#4A90C4"></span>Annual Members</div>
+    </div>
+    <div style="position:relative">
+      <canvas id="dataChart"></canvas>
+    </div>
+  </div>
+
+  <!-- ── BELLABEAT PROJECT CARD ── -->
+  <div class="project-card fade-up" style="margin-top: 3rem;">
+    <div class="project-header">
+      <div>
+        <div class="project-badge">✓ Complete</div>
+        <h3>Bellabeat App<br>Marketing Strategy</h3>
+        <p>What smart device usage trends can inform Bellabeat's marketing strategy?
+        An analysis of FitBit fitness tracker data across 33 users to uncover
+        behavioural patterns and product opportunities.</p>
+      </div>
+      <div class="project-meta">
+        <div class="meta-item">📅 <strong>April – May 2016</strong></div>
+        <div class="meta-item">👥 <strong>33 FitBit users</strong></div>
+        <div class="meta-item">📊 <strong>940 daily activity records</strong></div>
+        <div class="meta-item">🎯 <strong>Focus: Bellabeat app</strong></div>
+      </div>
+    </div>
+
+    <div class="project-findings">
+      <div class="finding">
+        <div class="finding-num" style="color:#D4533A">81%</div>
+        <div class="finding-label">Of the day<br>is sedentary</div>
+      </div>
+      <div class="finding">
+        <div class="finding-num" style="color:#E8A020">6pm</div>
+        <div class="finding-label">Peak activity<br>window daily</div>
+      </div>
+      <div class="finding">
+        <div class="finding-num" style="color:#8EAEC8">54%</div>
+        <div class="finding-label">Sleep under<br>7 hours nightly</div>
+      </div>
+      <div class="finding">
+        <div class="finding-num" style="color:#4CAF80">0.62</div>
+        <div class="finding-label">Intensity beats<br>steps (r value)</div>
+      </div>
+    </div>
+
+    <div class="project-charts">
+      <div class="chart-thumb" onclick="openLightbox('bellabeat-case-study/hourly_patterns.png', 'Hourly Activity Patterns')">
+        <img src="bellabeat-case-study/hourly_patterns.png" alt="Hourly patterns">
+        <div class="chart-thumb-label">hourly_patterns.png</div>
+      </div>
+      <div class="chart-thumb" onclick="openLightbox('bellabeat-case-study/activity_segments.png', 'Activity Segments')">
+        <img src="bellabeat-case-study/activity_segments.png" alt="Activity segments">
+        <div class="chart-thumb-label">activity_segments.png</div>
+      </div>
+      <div class="chart-thumb" onclick="openLightbox('bellabeat-case-study/sleep_distribution.png', 'Sleep Distribution')">
+        <img src="bellabeat-case-study/sleep_distribution.png" alt="Sleep distribution">
+        <div class="chart-thumb-label">sleep_distribution.png</div>
+      </div>
+      <div class="chart-thumb" onclick="openLightbox('bellabeat-case-study/sedentary_deepdive.png', 'Sedentary Deep Dive')">
+        <img src="bellabeat-case-study/sedentary_deepdive.png" alt="Sedentary deep dive">
+        <div class="chart-thumb-label">sedentary_deepdive.png</div>
+      </div>
+      <div class="chart-thumb" onclick="openLightbox('bellabeat-case-study/feature_engagement.png', 'Feature Engagement')">
+        <img src="bellabeat-case-study/feature_engagement.png" alt="Feature engagement">
+        <div class="chart-thumb-label">feature_engagement.png</div>
+      </div>
+    </div>
+
+    <div class="project-footer">
+      <div class="project-tools">
+        <span class="tool-tag">Python</span>
+        <span class="tool-tag">Pandas</span>
+        <span class="tool-tag">Matplotlib</span>
+        <span class="tool-tag">Excel</span>
+        <span class="tool-tag">PowerPoint</span>
+      </div>
+      <div class="project-links">
+        <a href="bellabeat-case-study/Bellabeat_Case_Study.pptx" class="project-link link-primary" download>↓ Download Deck</a>
+        <a href="https://github.com/abduldoesresearch-maker/abduldoesresearch-maker.github.io/tree/main/bellabeat-case-study" target="_blank" class="project-link link-secondary">View on GitHub ↗</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── BELLABEAT LIVE DATA EXPLORER ── -->
+  <div class="chart-section-label fade-up">
+    <div class="chart-section-label-line"></div>
+    <span>Bellabeat Data Explorer</span>
+    <div class="chart-section-label-line"></div>
+  </div>
+
+  <div class="chart-container fade-up" style="border-color: rgba(232,160,32,0.25);">
+    <div class="chart-header">
+      <div>
+        <div class="chart-title" style="color:#E8A020">Interactive Data Explorer</div>
+        <div class="chart-subtitle">Hover over bars to see exact figures</div>
+      </div>
+      <div class="chart-tabs">
+        <button class="chart-tab active" id="bb-tab-hourly" onclick="switchBBChart('hourly')">Hourly Activity</button>
+        <button class="chart-tab" id="bb-tab-segments" onclick="switchBBChart('segments')">User Segments</button>
+        <button class="chart-tab" id="bb-tab-engagement" onclick="switchBBChart('engagement')">Feature Engagement</button>
+      </div>
+    </div>
+    <div class="chart-legend" id="bb-legend">
+      <div class="legend-item"><span class="legend-dot" style="background:#E8A020"></span>Steps</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#D4533A"></span>Calories</div>
+    </div>
+    <div style="position:relative">
+      <canvas id="bbChart"></canvas>
+      <!-- FIX #10: bbTooltip now uses .chart-tooltip class for consistent position:fixed -->
+      <div id="bbTooltip" class="chart-tooltip"></div>
+    </div>
+  </div>
+
+  <!-- ── COMING SOON ── -->
+  <div class="coming-soon fade-up">
+    <h4>More projects coming soon</h4>
+    <p>SQL portfolio · Dashboard projects · Automation scripts</p>
+  </div>
+
+  </div><!-- /container -->
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="contact">
+  <div class="container">
+  <div class="section-tag">Get In Touch</div>
+  <h2 class="section-title fade-up">Let's work together.</h2>
+  <p class="fade-up">I partner with businesses and teams that need data to drive
+  real decisions. Whether it is a one-off analysis or an ongoing engagement,
+  if you have a data challenge, let us talk.</p>
+  <div class="contact-links fade-up">
+    <a href="mailto:abduldoesresearch@gmail.com" class="btn btn-primary">Email Me ✉</a>
+    <a href="https://www.linkedin.com/in/abdullahi-bagana-6b5599121/" target="_blank" class="btn btn-outline">LinkedIn ↗</a>
+    <a href="https://github.com/abduldoesresearch-maker" target="_blank" class="btn btn-outline">GitHub ↗</a>
+  </div>
+  </div><!-- /container -->
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <span class="footer-logo">Abdul<span>.</span></span>
+    <p>Built with HTML · CSS · JS · Hosted on GitHub Pages</p>
+    <p>© 2026 abduldoesresearch-maker</p>
+  </div>
+</footer>
+
+<script>
+// ══════════════════════════════════════════════
+// FIX #4: roundRect polyfill for Safari < 15.4 and older browsers
+// ══════════════════════════════════════════════
+if (!CanvasRenderingContext2D.prototype.roundRect) {
+  CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, radii) {
+    const r = Array.isArray(radii) ? radii[0] : (radii || 0);
+    const clamp = Math.min(r, Math.abs(w) / 2, Math.abs(h) / 2);
+    this.beginPath();
+    this.moveTo(x + clamp, y);
+    this.lineTo(x + w - clamp, y);
+    this.quadraticCurveTo(x + w, y, x + w, y + clamp);
+    this.lineTo(x + w, y + h - clamp);
+    this.quadraticCurveTo(x + w, y + h, x + w - clamp, y + h);
+    this.lineTo(x + clamp, y + h);
+    this.quadraticCurveTo(x, y + h, x, y + h - clamp);
+    this.lineTo(x, y + clamp);
+    this.quadraticCurveTo(x, y, x + clamp, y);
+    this.closePath();
+    return this;
+  };
+}
+
+// ══════════════════════════════════════════════
+// 1. PARTICLE CONSTELLATION BACKGROUND
+// ══════════════════════════════════════════════
+const canvas = document.getElementById('particle-canvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+let mouse = { x: null, y: null };
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+
+class Particle {
+  constructor() { this.reset(); }
+  reset() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.size = Math.random() * 1.5 + 0.3;
+    this.speedX = (Math.random() - 0.5) * 0.3;
+    this.speedY = (Math.random() - 0.5) * 0.3;
+    this.opacity = Math.random() * 0.5 + 0.1;
+    const colors = ['#4A90C4', '#E8634A', '#F5A623', '#C8DCFA', '#00C896'];
+    this.color = colors[Math.floor(Math.random() * colors.length)];
+  }
+  update() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+    if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+    if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+    if (mouse.x) {
+      const dx = this.x - mouse.x, dy = this.y - mouse.y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist < 100) { this.x += (dx / dist) * 1.5; this.y += (dy / dist) * 1.5; }
+    }
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fillStyle = this.color;
+    ctx.globalAlpha = this.opacity;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  }
+}
+
+for (let i = 0; i < 120; i++) particles.push(new Particle());
+
+function drawConnections() {
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist < 120) {
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.strokeStyle = '#4A90C4';
+        ctx.globalAlpha = (1 - dist/120) * 0.12;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+      }
+    }
+  }
+}
+
+function animateParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => { p.update(); p.draw(); });
+  drawConnections();
+  requestAnimationFrame(animateParticles);
+}
+animateParticles();
+
+// ══════════════════════════════════════════════
+// 2. TYPING ANIMATION
+// ══════════════════════════════════════════════
+const lines = [
+  { text: "Data that tells", italic: false },
+  { text: "the real story.", italic: true }
+];
+
+const titleEl = document.getElementById('hero-title');
+let lineIndex = 0, charIndex = 0;
+
+function buildTitle() {
+  let html = '';
+  lines.forEach((line, i) => {
+    if (i < lineIndex) {
+      html += i === 0 ? line.text + '<br>' : `<em>${line.text}</em>`;
+    } else if (i === lineIndex) {
+      const typed = line.text.slice(0, charIndex);
+      html += i === 0
+        ? typed + '<span class="cursor"></span>'
+        : `<em>${typed}</em><span class="cursor"></span>`;
+    }
+  });
+  titleEl.innerHTML = html;
+}
+
+function typeNext() {
+  if (lineIndex >= lines.length) return;
+  const line = lines[lineIndex];
+  if (charIndex <= line.text.length) {
+    buildTitle();
+    charIndex++;
+    setTimeout(typeNext, charIndex === 1 && lineIndex === 1 ? 300 : 45);
+  } else {
+    lineIndex++;
+    charIndex = 0;
+    if (lineIndex < lines.length) setTimeout(typeNext, 200);
+    else buildTitle();
+  }
+}
+setTimeout(typeNext, 600);
+
+// ══════════════════════════════════════════════
+// 3. COUNT-UP ANIMATION
+// ══════════════════════════════════════════════
+function formatNumber(n) {
+  if (n >= 1000000) return (n/1000000).toFixed(1) + 'M';
+  if (n >= 1000) return (n/1000).toFixed(0) + 'K';
+  return n.toString();
+}
+
+function animateCount(el) {
+  const target = parseInt(el.dataset.target);
+  const duration = 2000;
+  const start = performance.now();
+  function update(now) {
+    const progress = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    el.textContent = formatNumber(Math.floor(eased * target));
+    if (progress < 1) requestAnimationFrame(update);
+    else el.textContent = formatNumber(target);
+  }
+  requestAnimationFrame(update);
+}
+
+const countObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) { animateCount(entry.target); countObserver.unobserve(entry.target); }
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('.count-up').forEach(el => countObserver.observe(el));
+
+// ══════════════════════════════════════════════
+// 4. CYCLISTIC INTERACTIVE CHART
+//
+// FIX #2 & #3: Separated canvas init (sets width/scale) from layout
+// calculation (returns dims only). Hit-test functions use getChartLayout()
+// which never touches the canvas — so no mid-frame canvas resets.
+// ══════════════════════════════════════════════
+const chartData = {
+  seasonal: {
+    labels: ['Spring\n(May–Jul)', 'Summer\n(Aug–Oct)', 'Fall\n(Nov–Jan)', 'Winter\n(Feb–Apr)'],
+    casual:  [797812, 826895, 151873, 260458],
+    member:  [1146391, 1323464, 482746, 706010],
+    yLabel: 'Total Rides'
+  },
+  weekday: {
+    labels: ['Weekday', 'Weekend'],
+    casual:  [1280567, 756471],
+    member:  [2813403, 845208],
+    yLabel: 'Total Rides'
+  },
+  duration: {
+    labels: ['Spring\n(May–Jul)', 'Summer\n(Aug–Oct)', 'Fall\n(Nov–Jan)', 'Winter\n(Feb–Apr)'],
+    casual:  [24.7, 22.1, 17.7, 19.3],
+    member:  [12.9, 12.7, 12.2, 11.3],
+    yLabel: 'Avg Minutes'
+  }
+};
+
+let activeChart = 'seasonal';
+let hoveredBar = null;
+
+const chartCanvas = document.getElementById('dataChart');
+const chartCtx = chartCanvas.getContext('2d');
+const tooltip = document.getElementById('chartTooltip');
+
+// Returns layout dims in CSS pixels — never touches the canvas
+function getChartLayout() {
+  return {
+    w: chartCanvas.offsetWidth,
+    h: 280,
+    pad: { top: 20, right: 20, bottom: 50, left: 70 }
+  };
+}
+
+// Initialises canvas resolution — call only at the start of drawChart()
+function initChartCanvas() {
+  const { w, h } = getChartLayout();
+  const dpr = window.devicePixelRatio || 1;
+  chartCanvas.width  = w * dpr;
+  chartCanvas.height = h * dpr;
+  chartCanvas.style.height = h + 'px';
+  chartCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+function drawChart(hovered) {
+  initChartCanvas(); // only place canvas is reset
+  const { w, h, pad } = getChartLayout();
+  const data = chartData[activeChart];
+  const chartW = w - pad.left - pad.right;
+  const chartH = h - pad.top - pad.bottom;
+
+  chartCtx.clearRect(0, 0, w, h);
+
+  const maxVal = Math.max(...data.casual, ...data.member) * 1.15;
+  const n = data.labels.length;
+  const groupW = chartW / n;
+  const barW = groupW * 0.3;
+  const gap  = groupW * 0.05;
+
+  // Grid lines + Y labels
+  for (let i = 0; i <= 4; i++) {
+    const y = pad.top + chartH - (i / 4) * chartH;
+    chartCtx.beginPath();
+    chartCtx.moveTo(pad.left, y);
+    chartCtx.lineTo(pad.left + chartW, y);
+    chartCtx.strokeStyle = 'rgba(200,220,250,0.07)';
+    chartCtx.lineWidth = 1;
+    chartCtx.stroke();
+    const val = maxVal * i / 4;
+    chartCtx.fillStyle = '#7A99C8';
+    chartCtx.font = '11px DM Mono, monospace';
+    chartCtx.textAlign = 'right';
+    const lbl = activeChart === 'duration'
+      ? val.toFixed(0) + 'm'
+      : val >= 1e6 ? (val/1e6).toFixed(1)+'M'
+      : val >= 1e3 ? (val/1e3).toFixed(0)+'K'
+      : val.toFixed(0);
+    chartCtx.fillText(lbl, pad.left - 8, y + 4);
+  }
+
+  // Bars
+  data.labels.forEach((label, i) => {
+    const cx = pad.left + i * groupW + groupW / 2;
+
+    // Casual bar
+    const cH = (data.casual[i] / maxVal) * chartH;
+    const cX = cx - barW - gap / 2;
+    const cY = pad.top + chartH - cH;
+    const isHovC = hovered && hovered.i === i && hovered.type === 'casual';
+    chartCtx.fillStyle = isHovC ? '#ff7a5e' : '#E8634A';
+    if (isHovC) { chartCtx.shadowColor = '#E8634A'; chartCtx.shadowBlur = 12; }
+    chartCtx.beginPath();
+    chartCtx.roundRect(cX, cY, barW, cH, [4, 4, 0, 0]);
+    chartCtx.fill();
+    chartCtx.shadowBlur = 0;
+
+    // Member bar
+    const mH = (data.member[i] / maxVal) * chartH;
+    const mX = cx + gap / 2;
+    const mY = pad.top + chartH - mH;
+    const isHovM = hovered && hovered.i === i && hovered.type === 'member';
+    chartCtx.fillStyle = isHovM ? '#68aadc' : '#4A90C4';
+    if (isHovM) { chartCtx.shadowColor = '#4A90C4'; chartCtx.shadowBlur = 12; }
+    chartCtx.beginPath();
+    chartCtx.roundRect(mX, mY, barW, mH, [4, 4, 0, 0]);
+    chartCtx.fill();
+    chartCtx.shadowBlur = 0;
+
+    // X labels
+    chartCtx.fillStyle = '#7A99C8';
+    chartCtx.font = '11px Outfit, sans-serif';
+    chartCtx.textAlign = 'center';
+    label.split('\n').forEach((ln, li) => {
+      chartCtx.fillText(ln, cx, pad.top + chartH + 16 + li * 14);
+    });
+  });
+}
+
+// FIX #2: getBarAt uses getChartLayout() — never touches canvas
+function getBarAt(mouseX, mouseY) {
+  const { w, h, pad } = getChartLayout();
+  const data = chartData[activeChart];
+  const chartW = w - pad.left - pad.right;
+  const chartH = h - pad.top - pad.bottom;
+  const maxVal = Math.max(...data.casual, ...data.member) * 1.15;
+  const n = data.labels.length;
+  const groupW = chartW / n;
+  const barW = groupW * 0.3;
+  const gap  = groupW * 0.05;
+
+  for (let i = 0; i < n; i++) {
+    const cx = pad.left + i * groupW + groupW / 2;
+
+    const cX = cx - barW - gap / 2;
+    const cH = (data.casual[i] / maxVal) * chartH;
+    const cY = pad.top + chartH - cH;
+    if (mouseX >= cX && mouseX <= cX + barW && mouseY >= cY && mouseY <= cY + cH)
+      return { i, type: 'casual', val: data.casual[i], label: data.labels[i] };
+
+    const mX = cx + gap / 2;
+    const mH = (data.member[i] / maxVal) * chartH;
+    const mY = pad.top + chartH - mH;
+    if (mouseX >= mX && mouseX <= mX + barW && mouseY >= mY && mouseY <= mY + mH)
+      return { i, type: 'member', val: data.member[i], label: data.labels[i] };
+  }
+  return null;
+}
+
+function fmtChart(v) {
+  if (activeChart === 'duration') return v + ' min';
+  return v >= 1e6 ? (v/1e6).toFixed(2)+'M' : v.toLocaleString();
+}
+
+function showChartTooltip(e, bar) {
+  const data = chartData[activeChart];
+  const label = bar.label.replace('\n', ' ');
+  tooltip.style.display = 'block';
+  tooltip.style.left = (e.clientX + 16) + 'px';
+  tooltip.style.top  = (e.clientY - 10) + 'px';
+  tooltip.innerHTML = `
+    <div class="tooltip-title">${label}</div>
+    <div class="tooltip-row">
+      <span class="tooltip-label" style="color:#E8634A">Casual</span>
+      <span class="tooltip-val">${fmtChart(data.casual[bar.i])}</span>
+    </div>
+    <div class="tooltip-row">
+      <span class="tooltip-label" style="color:#4A90C4">Member</span>
+      <span class="tooltip-val">${fmtChart(data.member[bar.i])}</span>
+    </div>`;
+}
+
+chartCanvas.addEventListener('mousemove', e => {
+  const rect = chartCanvas.getBoundingClientRect();
+  const bar = getBarAt(e.clientX - rect.left, e.clientY - rect.top);
+  if (bar) { hoveredBar = bar; drawChart(bar); showChartTooltip(e, bar); }
+  else     { hoveredBar = null; drawChart(null); tooltip.style.display = 'none'; }
+});
+
+chartCanvas.addEventListener('mouseleave', () => {
+  hoveredBar = null; drawChart(null); tooltip.style.display = 'none';
+});
+
+chartCanvas.addEventListener('touchstart', e => { e.preventDefault(); }, { passive: false });
+chartCanvas.addEventListener('touchmove', e => {
+  e.preventDefault();
+  const touch = e.touches[0];
+  const rect = chartCanvas.getBoundingClientRect();
+  const bar = getBarAt(touch.clientX - rect.left, touch.clientY - rect.top);
+  if (bar) {
+    hoveredBar = bar; drawChart(bar);
+    const data = chartData[activeChart];
+    const label = bar.label.replace('\n', ' ');
+    tooltip.style.display = 'block';
+    tooltip.style.left = (touch.clientX + 16) + 'px';
+    tooltip.style.top  = (touch.clientY - 40) + 'px';
+    tooltip.innerHTML = `
+      <div class="tooltip-title">${label}</div>
+      <div class="tooltip-row">
+        <span class="tooltip-label" style="color:#E8634A">Casual</span>
+        <span class="tooltip-val">${fmtChart(data.casual[bar.i])}</span>
+      </div>
+      <div class="tooltip-row">
+        <span class="tooltip-label" style="color:#4A90C4">Member</span>
+        <span class="tooltip-val">${fmtChart(data.member[bar.i])}</span>
+      </div>`;
+  } else { tooltip.style.display = 'none'; }
+}, { passive: false });
+chartCanvas.addEventListener('touchend', () => {
+  setTimeout(() => { tooltip.style.display = 'none'; drawChart(null); }, 1500);
+});
+
+document.querySelectorAll('#cyclistic-chart .chart-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('#cyclistic-chart .chart-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    activeChart = tab.dataset.chart;
+    drawChart(null);
+  });
+});
+
+const chartObserver = new IntersectionObserver(entries => {
+  if (entries[0].isIntersecting) drawChart(null);
+}, { threshold: 0.3 });
+chartObserver.observe(chartCanvas);
+window.addEventListener('resize', () => drawChart(hoveredBar));
+setTimeout(() => drawChart(null), 100);
+
+// ══════════════════════════════════════════════
+// 5. BELLABEAT INTERACTIVE CHART
+//    FIX #3: same canvas-init / layout separation as Cyclistic above
+// ══════════════════════════════════════════════
+const bbData = {
+  hourly: {
+    labels: ['12am','1am','2am','3am','4am','5am','6am','7am','8am','9am','10am','11am',
+             '12pm','1pm','2pm','3pm','4pm','5pm','6pm','7pm','8pm','9pm','10pm','11pm'],
+    primary:   [12,10,9,8,9,18,58,305,430,442,487,460,550,540,528,540,500,550,599,583,354,303,241,107],
+    secondary: [72,70,69,68,69,80,96,103,106,106,113,114,117,116,114,116,107,114,122,122,119,95,85,78],
+    primaryLabel: 'Avg Steps', secondaryLabel: 'Avg Calories', yLabel: 'Count'
+  },
+  segments: {
+    labels: ['Sedentary\n< 5K steps', 'Low Active\n5–7.5K steps', 'Fairly Active\n7.5–10K steps', 'Very Active\n> 10K steps'],
+    primary:   [8, 9, 9, 7],
+    secondary: [2936, 6567, 8682, 12488],
+    primaryLabel: 'Users', secondaryLabel: 'Avg Steps', yLabel: 'Count'
+  },
+  engagement: {
+    labels: ['Activity\nTracking', 'Sleep\nTracking', 'Weight\nLogging'],
+    primary:   [33, 24, 8],
+    secondary: [100, 73, 24],
+    primaryLabel: 'Users', secondaryLabel: '% Engaged', yLabel: 'Count'
+  }
+};
+
+let activeBBChart = 'hourly';
+let hoveredBBBar = null;
+
+const bbCanvas  = document.getElementById('bbChart');
+const bbCtx     = bbCanvas ? bbCanvas.getContext('2d') : null;
+const bbTooltip = document.getElementById('bbTooltip');
+
+function getBBLayout() {
+  return {
+    w: bbCanvas.offsetWidth,
+    h: 280,
+    pad: { top: 20, right: 20, bottom: 55, left: 70 }
+  };
+}
+
+function initBBCanvas() {
+  const { w, h } = getBBLayout();
+  const dpr = window.devicePixelRatio || 1;
+  bbCanvas.width  = w * dpr;
+  bbCanvas.height = h * dpr;
+  bbCanvas.style.height = h + 'px';
+  bbCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+function drawBBChart(hovered) {
+  if (!bbCtx) return;
+  initBBCanvas(); // only place canvas is reset
+  const { w, h, pad } = getBBLayout();
+  const data = bbData[activeBBChart];
+  const chartW = w - pad.left - pad.right;
+  const chartH = h - pad.top - pad.bottom;
+
+  bbCtx.clearRect(0, 0, w, h);
+
+  const maxVal = Math.max(...data.primary, ...data.secondary) * 1.15;
+  const n = data.labels.length;
+  const groupW = chartW / n;
+  const barW = activeBBChart === 'hourly' ? Math.min(groupW * 0.7, 18) : groupW * 0.3;
+  const gap  = groupW * 0.05;
+
+  for (let i = 0; i <= 4; i++) {
+    const y = pad.top + chartH - (i / 4) * chartH;
+    bbCtx.beginPath();
+    bbCtx.moveTo(pad.left, y);
+    bbCtx.lineTo(pad.left + chartW, y);
+    bbCtx.strokeStyle = 'rgba(232,160,32,0.07)';
+    bbCtx.lineWidth = 1;
+    bbCtx.stroke();
+    const val = maxVal * i / 4;
+    bbCtx.fillStyle = '#8A8A8E';
+    bbCtx.font = '11px DM Mono, monospace';
+    bbCtx.textAlign = 'right';
+    bbCtx.fillText(val >= 1000 ? (val/1000).toFixed(1)+'K' : val.toFixed(0), pad.left - 8, y + 4);
+  }
+
+  data.labels.forEach((label, i) => {
+    const cx = pad.left + i * groupW + groupW / 2;
+
+    if (activeBBChart === 'hourly') {
+      const pH = (data.primary[i] / maxVal) * chartH;
+      const pX = cx - barW / 2;
+      const pY = pad.top + chartH - pH;
+      const isHov = hovered && hovered.i === i;
+      bbCtx.fillStyle = isHov ? '#F5C842' : '#E8A020';
+      if (isHov) { bbCtx.shadowColor = '#E8A020'; bbCtx.shadowBlur = 10; }
+      bbCtx.beginPath();
+      bbCtx.roundRect(pX, pY, barW, pH, [3, 3, 0, 0]);
+      bbCtx.fill();
+      bbCtx.shadowBlur = 0;
+    } else {
+      // Primary bar
+      const pH = (data.primary[i] / maxVal) * chartH;
+      const pX = cx - barW - gap / 2;
+      const pY = pad.top + chartH - pH;
+      const isHovP = hovered && hovered.i === i && hovered.type === 'primary';
+      bbCtx.fillStyle = isHovP ? '#F5C842' : '#E8A020';
+      if (isHovP) { bbCtx.shadowColor = '#E8A020'; bbCtx.shadowBlur = 10; }
+      bbCtx.beginPath();
+      bbCtx.roundRect(pX, pY, barW, pH, [3, 3, 0, 0]);
+      bbCtx.fill();
+      bbCtx.shadowBlur = 0;
+
+      // Secondary bar
+      const sH = (data.secondary[i] / maxVal) * chartH;
+      const sX = cx + gap / 2;
+      const sY = pad.top + chartH - sH;
+      const isHovS = hovered && hovered.i === i && hovered.type === 'secondary';
+      bbCtx.fillStyle = isHovS ? '#e06a52' : '#D4533A';
+      if (isHovS) { bbCtx.shadowColor = '#D4533A'; bbCtx.shadowBlur = 10; }
+      bbCtx.beginPath();
+      bbCtx.roundRect(sX, sY, barW, sH, [3, 3, 0, 0]);
+      bbCtx.fill();
+      bbCtx.shadowBlur = 0;
+    }
+
+    bbCtx.fillStyle = '#8A8A8E';
+    bbCtx.font = activeBBChart === 'hourly' ? '9px Outfit, sans-serif' : '10px Outfit, sans-serif';
+    bbCtx.textAlign = 'center';
+    label.split('\n').forEach((ln, li) => {
+      bbCtx.fillText(ln, cx, pad.top + chartH + 14 + li * 13);
+    });
+  });
+}
+
+// FIX #3: getBBBarAt uses getBBLayout() — never touches canvas
+function getBBBarAt(mx, my) {
+  if (!bbCanvas) return null;
+  const { w, h, pad } = getBBLayout();
+  const data = bbData[activeBBChart];
+  const chartW = w - pad.left - pad.right;
+  const chartH = h - pad.top - pad.bottom;
+  const maxVal = Math.max(...data.primary, ...data.secondary) * 1.15;
+  const n = data.labels.length;
+  const groupW = chartW / n;
+  const barW = activeBBChart === 'hourly' ? Math.min(groupW * 0.7, 18) : groupW * 0.3;
+  const gap  = groupW * 0.05;
+
+  for (let i = 0; i < n; i++) {
+    const cx = pad.left + i * groupW + groupW / 2;
+
+    if (activeBBChart === 'hourly') {
+      const pH = (data.primary[i] / maxVal) * chartH;
+      const pX = cx - barW / 2;
+      const pY = pad.top + chartH - pH;
+      if (mx >= pX && mx <= pX + barW && my >= pY && my <= pY + pH)
+        return { i, type: 'primary', label: data.labels[i] };
+    } else {
+      const pH = (data.primary[i] / maxVal) * chartH;
+      const pX = cx - barW - gap / 2;
+      const pY = pad.top + chartH - pH;
+      if (mx >= pX && mx <= pX + barW && my >= pY && my <= pY + pH)
+        return { i, type: 'primary', label: data.labels[i] };
+
+      const sH = (data.secondary[i] / maxVal) * chartH;
+      const sX = cx + gap / 2;
+      const sY = pad.top + chartH - sH;
+      if (mx >= sX && mx <= sX + barW && my >= sY && my <= sY + sH)
+        return { i, type: 'secondary', label: data.labels[i] };
+    }
+  }
+  return null;
+}
+
+function switchBBChart(name) {
+  activeBBChart = name;
+  document.querySelectorAll('[id^="bb-tab-"]').forEach(b => b.classList.remove('active'));
+  document.getElementById('bb-tab-' + name).classList.add('active');
+  const data = bbData[name];
+  document.getElementById('bb-legend').innerHTML = `
+    <div class="legend-item"><span class="legend-dot" style="background:#E8A020"></span>${data.primaryLabel}</div>
+    ${name !== 'hourly' ? `<div class="legend-item"><span class="legend-dot" style="background:#D4533A"></span>${data.secondaryLabel}</div>` : ''}`;
+  drawBBChart(null);
+}
+
+if (bbCanvas) {
+  bbCanvas.addEventListener('mousemove', e => {
+    const rect = bbCanvas.getBoundingClientRect();
+    const bar = getBBBarAt(e.clientX - rect.left, e.clientY - rect.top);
+    const data = bbData[activeBBChart];
+
+    if (bar) {
+      hoveredBBBar = bar; drawBBChart(bar);
+      const val = bar.type === 'primary' ? data.primary[bar.i] : data.secondary[bar.i];
+      const valLabel = bar.type === 'primary' ? data.primaryLabel : data.secondaryLabel;
+      const col = bar.type === 'primary' ? '#E8A020' : '#D4533A';
+      bbTooltip.style.display = 'block';
+      bbTooltip.style.left = (e.clientX + 16) + 'px';
+      bbTooltip.style.top  = (e.clientY - 10) + 'px';
+      bbTooltip.innerHTML = `
+        <div class="tooltip-title">${bar.label.replace('\n', ' ')}</div>
+        <div class="tooltip-row">
+          <span class="tooltip-label" style="color:${col}">${valLabel}</span>
+          <span class="tooltip-val">${val.toLocaleString()}</span>
+        </div>`;
+    } else {
+      hoveredBBBar = null; drawBBChart(null); bbTooltip.style.display = 'none';
+    }
+  });
+
+  bbCanvas.addEventListener('mouseleave', () => {
+    hoveredBBBar = null; drawBBChart(null); bbTooltip.style.display = 'none';
+  });
+
+  bbCanvas.addEventListener('touchstart', e => { e.preventDefault(); }, { passive: false });
+  bbCanvas.addEventListener('touchmove', e => {
+    e.preventDefault();
+    const touch = e.touches[0];
+    const rect = bbCanvas.getBoundingClientRect();
+    const bar = getBBBarAt(touch.clientX - rect.left, touch.clientY - rect.top);
+    if (bar) {
+      const data = bbData[activeBBChart];
+      const val = bar.type === 'primary' ? data.primary[bar.i] : data.secondary[bar.i];
+      const valLabel = bar.type === 'primary' ? data.primaryLabel : data.secondaryLabel;
+      const col = bar.type === 'primary' ? '#E8A020' : '#D4533A';
+      hoveredBBBar = bar; drawBBChart(bar);
+      bbTooltip.style.display = 'block';
+      bbTooltip.style.left = (touch.clientX + 16) + 'px';
+      bbTooltip.style.top  = (touch.clientY - 40) + 'px';
+      bbTooltip.innerHTML = `
+        <div class="tooltip-title">${bar.label.replace('\n', ' ')}</div>
+        <div class="tooltip-row">
+          <span class="tooltip-label" style="color:${col}">${valLabel}</span>
+          <span class="tooltip-val">${val.toLocaleString()}</span>
+        </div>`;
+    } else { bbTooltip.style.display = 'none'; }
+  }, { passive: false });
+
+  bbCanvas.addEventListener('touchend', () => {
+    setTimeout(() => { bbTooltip.style.display = 'none'; drawBBChart(null); }, 1500);
+  });
+
+  window.addEventListener('resize', () => drawBBChart(hoveredBBBar));
+  setTimeout(() => drawBBChart(null), 150);
+}
+
+// ══════════════════════════════════════════════
+// 6. SCROLL ANIMATIONS
+// ══════════════════════════════════════════════
+const fadeObserver = new IntersectionObserver(entries => {
+  entries.forEach(el => { if (el.isIntersecting) el.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-up').forEach(el => fadeObserver.observe(el));
+
+// ══════════════════════════════════════════════
+// 7. NAV SCROLL EFFECT
+// ══════════════════════════════════════════════
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// ══════════════════════════════════════════════
+// 8. LIGHTBOX
+// ══════════════════════════════════════════════
+function openLightbox(src, alt) {
+  const lb  = document.getElementById('lightbox');
+  const img = document.getElementById('lightbox-img');
+  img.src = src; img.alt = alt;
+  lb.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+document.getElementById('lightbox-close').addEventListener('click', () => {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+});
+
+document.getElementById('lightbox').addEventListener('click', e => {
+  if (e.target === e.currentTarget) {
+    e.currentTarget.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+});
+</script>
+</body>
+</html>
